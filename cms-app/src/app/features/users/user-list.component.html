@@ -1,0 +1,87 @@
+<div class="user-list-container">
+  <p-toast />
+  <p-confirmDialog />
+
+  <div class="header">
+    <h1>Users</h1>
+  </div>
+
+  <div class="filters">
+    <div class="search-box">
+      <p-iconField iconPosition="left">
+        <p-inputIcon styleClass="pi pi-search" />
+        <input 
+          pInputText 
+          type="text" 
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search users..." 
+        />
+      </p-iconField>
+    </div>
+  </div>
+
+  <p-table 
+    [value]="filteredUsers" 
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Username</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Joined At</th>
+        <th>Last Login</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>
+          <div class="user-cell">
+            <img [src]="'https://ui-avatars.com/api/?name=' + user.firstName + '+' + user.lastName" alt="User">
+            <span>{{ user.username }}</span>
+          </div>
+        </td>
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <p-tag 
+            [value]="user.role" 
+            [severity]="getRoleSeverity(user.role)"
+          />
+        </td>
+        <td>{{ formatDate(user.createdAt) }}</td>
+        <td>{{ formatDate(user.lastLogin) }}</td>
+        <td>
+          <div class="action-buttons">
+            <p-button 
+              icon="pi pi-trash" 
+              (onClick)="deleteUser(user)"
+              [text]="true"
+              [rounded]="true"
+              severity="danger"
+              pTooltip="Delete"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="empty-message">
+          <div class="empty-state">
+            <i class="pi pi-users"></i>
+            <p>No users found</p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

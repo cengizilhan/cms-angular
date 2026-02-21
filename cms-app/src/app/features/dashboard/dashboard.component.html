@@ -1,0 +1,71 @@
+<div class="dashboard-inner-container">
+  <div class="welcome-section">
+    <h1>Welcome back, {{ currentUser()?.firstName }}!</h1>
+    <p>Manage your blog content from here</p>
+  </div>
+
+  <div class="stats-grid">
+    <p-card>
+      <div class="stat-card">
+        <i class="pi pi-file stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ totalPosts }}</h3>
+          <p>Total Posts</p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card>
+      <div class="stat-card published">
+        <i class="pi pi-check-circle stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ publishedPosts }}</h3>
+          <p>Published</p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card>
+      <div class="stat-card draft">
+        <i class="pi pi-pencil stat-icon"></i>
+        <div class="stat-content">
+          <h3>{{ draftPosts }}</h3>
+          <p>Drafts</p>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <div class="actions-section">
+    <h2>Quick Actions</h2>
+    <div class="action-cards">
+      <p-card>
+        <div class="action-card">
+          <i class="pi pi-list action-icon"></i>
+          <h3>Manage Posts</h3>
+          <p>View, edit, and delete your blog posts</p>
+          <p-button 
+            label="Go to Posts" 
+            icon="pi pi-arrow-right"
+            (onClick)="navigateToBlogList()"
+            [outlined]="true"
+          />
+        </div>
+      </p-card>
+
+      <p-card>
+        <div class="action-card">
+          <i class="pi pi-plus-circle action-icon"></i>
+          <h3>Create New Post</h3>
+          <p>Write and publish a new blog post</p>
+          <p-button 
+            label="Create Post" 
+            icon="pi pi-plus"
+            (onClick)="navigateToCreatePost()"
+            severity="success"
+          />
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

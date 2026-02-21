@@ -1,0 +1,78 @@
+<div class="login-container">
+  <div class="login-card">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <i class="pi pi-lock"></i>
+          <h2>Login to CMS</h2>
+          <p>Enter your credentials to access the dashboard</p>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        @if (errorMessage) {
+          <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-3"></p-message>
+        }
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input 
+            pInputText 
+            id="email" 
+            formControlName="email" 
+            placeholder="Enter your email"
+            class="w-full"
+            [class.ng-invalid]="email?.invalid && email?.touched"
+          />
+          @if (email?.invalid && email?.touched) {
+            <small class="p-error">
+              @if (email?.errors?.['required']) {
+                Email is required
+              }
+              @if (email?.errors?.['email']) {
+                Please enter a valid email
+              }
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <p-password 
+            formControlName="password" 
+            [toggleMask]="true"
+            [feedback]="false"
+            placeholder="Enter your password"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+            [class.ng-invalid]="password?.invalid && password?.touched"
+          ></p-password>
+          @if (password?.invalid && password?.touched) {
+            <small class="p-error">
+              @if (password?.errors?.['required']) {
+                Password is required
+              }
+              @if (password?.errors?.['minlength']) {
+                Password must be at least 6 characters
+              }
+            </small>
+          }
+        </div>
+
+        <p-button 
+          type="submit" 
+          label="Login" 
+          icon="pi pi-sign-in"
+          [loading]="loading"
+          styleClass="w-full"
+        ></p-button>
+      </form>
+
+      <ng-template pTemplate="footer">
+        <div class="card-footer">
+          <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

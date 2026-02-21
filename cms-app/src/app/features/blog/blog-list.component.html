@@ -1,0 +1,122 @@
+<div class="blog-list-container">
+  <p-toast />
+  <p-confirmDialog />
+
+  <div class="header">
+    <h1>Blog Posts</h1>
+    <p-button 
+      label="Create New Post" 
+      icon="pi pi-plus" 
+      (onClick)="createNewPost()"
+      styleClass="p-button-success"
+    />
+  </div>
+
+  <div class="filters">
+    <div class="search-box">
+      <p-iconField iconPosition="left">
+        <p-inputIcon styleClass="pi pi-search" />
+        <input 
+          pInputText 
+          type="text" 
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search posts..." 
+        />
+      </p-iconField>
+    </div>
+
+    <div class="status-filter">
+      <p-dropdown
+        [(ngModel)]="selectedStatus"
+        [options]="statusOptions"
+        (ngModelChange)="onStatusChange()"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Filter by status"
+      />
+    </div>
+  </div>
+
+  <p-table 
+    [value]="filteredPosts" 
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} posts"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Categories</th>
+        <th>Status</th>
+        <th>Published</th>
+        <th>Views</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-post>
+      <tr>
+        <td>
+          <div class="post-title">
+            {{ post.title }}
+            <small class="post-excerpt">{{ post.excerpt | slice:0:60 }}{{ post.excerpt.length > 60 ? '...' : '' }}</small>
+          </div>
+        </td>
+        <td>{{ post.author.username }}</td>
+        <td>
+          <span class="category-badge" *ngFor="let category of post.categories">
+            {{ category }}
+          </span>
+        </td>
+        <td>
+          <p-tag 
+            [value]="post.status" 
+            [severity]="getStatusSeverity(post.status)"
+          />
+        </td>
+        <td>{{ formatDate(post.publishedAt) }}</td>
+        <td>{{ post.viewCount || 0 }}</td>
+        <td>
+          <div class="action-buttons">
+            <p-button 
+              icon="pi pi-pencil" 
+              (onClick)="editPost(post)"
+              [text]="true"
+              [rounded]="true"
+              severity="info"
+              pTooltip="Edit"
+            />
+            <p-button 
+              icon="pi pi-trash" 
+              (onClick)="deletePost(post)"
+              [text]="true"
+              [rounded]="true"
+              severity="danger"
+              pTooltip="Delete"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="empty-message">
+          <div class="empty-state">
+            <i class="pi pi-inbox"></i>
+            <p>No blog posts found</p>
+            <p-button 
+              label="Create Your First Post" 
+              icon="pi pi-plus" 
+              (onClick)="createNewPost()"
+              [outlined]="true"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

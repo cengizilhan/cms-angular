@@ -1,0 +1,18 @@
+<div class="blog-form-container">
+  <p-toast />
+
+  <div class="header">
+    <h1>{{ isEditMode ? 'Edit Blog Post' : 'Create New Blog Post' }}</h1>
+  </div>
+
+  <p-card>
+    <app-dynamic-form 
+      *ngIf="schema"
+      [schema]="schema" 
+      [data]="postData" 
+      [loading]="loading"
+      (formSubmit)="handleFormSubmit($event)"
+      (formCancel)="onCancel()"
+    />
+  </p-card>
+</div>

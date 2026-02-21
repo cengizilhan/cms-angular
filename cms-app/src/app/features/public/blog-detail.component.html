@@ -1,0 +1,64 @@
+<div class="blog-detail-container" *ngIf="post">
+  <div class="back-link">
+    <button (click)="goBack()" class="btn-back">
+      <i class="pi pi-arrow-left"></i> Back to Blog
+    </button>
+  </div>
+
+  <article class="blog-post">
+    <header class="post-header">
+      <div class="post-meta">
+        <span class="publish-date">{{ formatDate(post.publishedAt) }}</span>
+        <span class="separator">•</span>
+        <span class="view-count"><i class="pi pi-eye"></i> {{ post.viewCount || 0 }} views</span>
+      </div>
+      <h1>{{ post.title }}</h1>
+      <div class="post-author">
+        <img [src]="'https://ui-avatars.com/api/?name=' + post.author.firstName + '+' + post.author.lastName" [alt]="post.author.username" class="author-avatar">
+        <div class="author-info">
+          <span class="author-name">{{ post.author.firstName }} {{ post.author.lastName }}</span>
+          <span class="author-role">{{ post.author.role }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="featured-image" *ngIf="post.featuredImage">
+      <img [src]="post.featuredImage" [alt]="post.title">
+    </div>
+
+    <div class="post-content" [innerHTML]="post.content"></div>
+
+    <footer class="post-footer">
+      <div class="post-categories">
+        <h3>Categories</h3>
+        <div class="tags-container">
+          <span class="tag" *ngFor="let cat of post.categories">{{ cat }}</span>
+        </div>
+      </div>
+      <div class="post-tags" *ngIf="post.tags && post.tags.length > 0">
+        <h3>Tags</h3>
+        <div class="tags-container">
+          <span class="tag tag-outline" *ngFor="let tag of post.tags">#{{ tag }}</span>
+        </div>
+      </div>
+    </footer>
+  </article>
+
+  <section class="related-posts" *ngIf="relatedPosts.length > 0">
+    <h2>Related Articles</h2>
+    <div class="related-grid">
+      <div class="related-card" *ngFor="let rPost of relatedPosts" [routerLink]="['/blog', rPost.slug]">
+        <img [src]="rPost.featuredImage || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'" [alt]="rPost.title">
+        <div class="related-content">
+          <h3>{{ rPost.title }}</h3>
+          <span class="date">{{ formatDate(rPost.publishedAt) }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="loading-state" *ngIf="!post">
+  <i class="pi pi-spin pi-spinner"></i>
+  <p>Loading post...</p>
+</div>

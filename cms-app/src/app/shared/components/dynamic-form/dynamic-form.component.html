@@ -1,0 +1,129 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="dynamic-form">
+  <div class="form-grid">
+    <div 
+      *ngFor="let field of schema.fields" 
+      [className]="'form-field ' + (field.className || 'col-12')"
+    >
+      <label [for]="field.key">
+        {{ field.label }} <span *ngIf="field.required" class="required">*</span>
+      </label>
+
+      <!-- Text Input -->
+      <ng-container *ngIf="field.type === 'text'">
+        <input 
+          [id]="field.key"
+          type="text" 
+          pInputText 
+          [formControlName]="field.key"
+          [placeholder]="field.placeholder || ''"
+          [class.ng-invalid]="isInvalid(field.key)"
+        />
+      </ng-container>
+
+      <!-- Textarea -->
+      <ng-container *ngIf="field.type === 'textarea'">
+        <textarea 
+          [id]="field.key"
+          pInputTextarea 
+          [formControlName]="field.key"
+          [placeholder]="field.placeholder || ''"
+          rows="3"
+          [class.ng-invalid]="isInvalid(field.key)"
+        ></textarea>
+      </ng-container>
+
+      <!-- Rich Text Editor -->
+      <ng-container *ngIf="field.type === 'editor'">
+        <p-editor 
+          [formControlName]="field.key" 
+          [style]="{'height':'320px'}"
+          [class.ng-invalid]="isInvalid(field.key)"
+        >
+          <ng-template pTemplate="header">
+            <span class="ql-formats">
+              <button type="button" class="ql-bold"></button>
+              <button type="button" class="ql-italic"></button>
+              <button type="button" class="ql-underline"></button>
+            </span>
+            <span class="ql-formats">
+              <select class="ql-header">
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option selected></option>
+              </select>
+            </span>
+            <span class="ql-formats">
+              <button type="button" class="ql-link"></button>
+              <button type="button" class="ql-image"></button>
+            </span>
+          </ng-template>
+        </p-editor>
+      </ng-container>
+
+      <!-- Select Dropdown -->
+      <ng-container *ngIf="field.type === 'select'">
+        <p-dropdown
+          [id]="field.key"
+          [formControlName]="field.key"
+          [options]="field.options || []"
+          optionLabel="label"
+          optionValue="value"
+          [placeholder]="field.placeholder || 'Select option'"
+          [class.ng-invalid]="isInvalid(field.key)"
+        />
+      </ng-container>
+
+      <!-- Calendar / Date Picker -->
+      <ng-container *ngIf="field.type === 'calendar'">
+        <p-calendar 
+          [id]="field.key"
+          [formControlName]="field.key"
+          [showTime]="true"
+          [placeholder]="field.placeholder || 'Select date'"
+          dateFormat="yy-mm-dd"
+          [class.ng-invalid]="isInvalid(field.key)"
+        />
+      </ng-container>
+
+      <!-- Chips / Comma separated (as Text) -->
+      <ng-container *ngIf="field.type === 'chips'">
+        <input 
+          [id]="field.key"
+          type="text" 
+          pInputText 
+          [formControlName]="field.key"
+          [placeholder]="field.placeholder || ''"
+          [class.ng-invalid]="isInvalid(field.key)"
+        />
+      </ng-container>
+
+      <!-- Helper / Hint Text -->
+      <small class="field-hint" *ngIf="field.hint && !isInvalid(field.key)">
+        {{ field.hint }}
+      </small>
+
+      <!-- Error Messages -->
+      <small class="error-message" *ngIf="isInvalid(field.key)">
+        <span *ngIf="getControl(field.key)?.errors?.['required']">{{ field.label }} is required</span>
+      </small>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <p-button 
+      *ngIf="schema.cancelLabel"
+      [label]="schema.cancelLabel" 
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="onCancel()"
+      type="button"
+    />
+    <p-button 
+      [label]="schema.submitLabel || 'Submit'"
+      icon="pi pi-check"
+      type="submit"
+      [loading]="loading"
+    />
+  </div>
+</form>

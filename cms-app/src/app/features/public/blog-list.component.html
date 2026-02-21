@@ -1,0 +1,61 @@
+<div class="public-blog-container">
+  <header class="blog-header">
+    <h1>Our Blog</h1>
+    <p>Discover the latest stories, tutorials, and insights from our team.</p>
+  </header>
+
+  <div class="blog-controls">
+    <div class="search-section">
+      <p-iconField iconPosition="left">
+        <p-inputIcon styleClass="pi pi-search" />
+        <input 
+          pInputText 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (ngModelChange)="onSearch()"
+          placeholder="Search articles..." 
+        />
+      </p-iconField>
+    </div>
+
+    <div class="categories-section">
+      <button 
+        *ngFor="let cat of categories" 
+        class="category-tag"
+        [class.active]="selectedCategory === cat"
+        (click)="filterByCategory(cat)"
+      >
+        {{ cat }}
+      </button>
+    </div>
+  </div>
+
+  <div class="blog-grid" *ngIf="filteredPosts.length > 0; else noPosts">
+    <div class="blog-card" *ngFor="let post of filteredPosts" (click)="viewPost(post.slug)">
+      <div class="card-image">
+        <img [src]="post.featuredImage || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'" [alt]="post.title">
+        <div class="card-date">{{ formatDate(post.publishedAt) }}</div>
+      </div>
+      <div class="card-content">
+        <div class="card-categories">
+          <span *ngFor="let cat of post.categories">{{ cat }}</span>
+        </div>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.excerpt }}</p>
+        <div class="card-footer">
+          <span class="author">By {{ post.author.firstName }} {{ post.author.lastName }}</span>
+          <span class="read-more">Read More <i class="pi pi-arrow-right"></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noPosts>
+    <div class="empty-state">
+      <i class="pi pi-search"></i>
+      <h3>No articles found</h3>
+      <p>Try adjusting your search or category filters.</p>
+      <p-button label="Clear Filters" (onClick)="selectedCategory = ''; searchTerm = ''; applyFilters()" [text]="true" />
+    </div>
+  </ng-template>
+</div>

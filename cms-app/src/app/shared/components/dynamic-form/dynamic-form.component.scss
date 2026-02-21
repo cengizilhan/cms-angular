@@ -1,0 +1,68 @@
+.dynamic-form {
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.95rem;
+
+        .required {
+          color: #ef4444;
+          margin-left: 2px;
+        }
+      }
+
+      input, textarea, .p-dropdown, .p-calendar {
+        width: 100%;
+      }
+
+      .field-hint {
+        color: #6b7280;
+        font-size: 0.875rem;
+      }
+
+      .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+      }
+
+      &.col-12 { grid-column: span 12; }
+      &.col-6 { grid-column: span 6; }
+      &.col-4 { grid-column: span 4; }
+
+      @media (max-width: 768px) {
+        &.col-6, &.col-4 { grid-column: span 12; }
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+}
+
+::ng-deep {
+  .p-editor-container {
+    width: 100%;
+    .p-editor-content .ql-editor {
+      min-height: 250px;
+    }
+  }
+
+  .p-calendar, .p-dropdown {
+    width: 100%;
+  }
+}
